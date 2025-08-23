@@ -2,7 +2,7 @@ package com.example.journalApp.Entity;
 
 import com.example.journalApp.Controller.JournalEntryController;
 
-public class JournalEntry extends JournalEntryController {
+public class JournalEntry  {
     private long id;
     private String title;
     private String content;

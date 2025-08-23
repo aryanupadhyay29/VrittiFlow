@@ -12,6 +12,10 @@ import java.util.Map;
 @RequestMapping("/journal")
 public class JournalEntryController {
     private Map<Long , JournalEntry> journalEntries = new HashMap<>();
+    @GetMapping("/")
+    public String welcome(){
+        return "Welcome to Journal Application";
+    }
     @GetMapping("entries")
     public List<JournalEntry> getAll(){
         return new ArrayList<>(journalEntries.values());
