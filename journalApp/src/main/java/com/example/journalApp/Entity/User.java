@@ -4,6 +4,7 @@ package com.example.journalApp.Entity;
 import lombok.Data;
 import org.springframework.stereotype.Indexed;
 
+
 @Data
 public class User {
 
