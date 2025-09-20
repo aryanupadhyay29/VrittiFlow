@@ -1,42 +1,44 @@
 package com.example.journalApp.Controller;
 
 import com.example.journalApp.Entity.JournalEntry;
+import com.example.journalApp.service.JournalEntryService;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
 @RequestMapping("/journal")
 public class JournalEntryController {
-    private Map<Long , JournalEntry> journalEntries = new HashMap<>();
-    @GetMapping("/")
-    public String welcome(){
-        return "Welcome to Journal Application";
-    }
+    @Autowired
+    private JournalEntryService journalEntryService;
+
     @GetMapping("entries")
     public List<JournalEntry> getAll(){
-        return new ArrayList<>(journalEntries.values());
+        return journalEntryService.getAllEntries();
     }
+
     @PostMapping()
-    public boolean createEntry(@RequestBody JournalEntry entry){
-        journalEntries.put(entry.getId(), entry);
-        return true;
+    public  JournalEntry createEntry(@RequestBody JournalEntry entry){
+        entry.setDate(LocalDateTime.now());
+        journalEntryService.saveEntry(entry);
+        return entry;
 
     }
     @GetMapping("id/{myId}")
-    public JournalEntry getJournalEntrybyId(@PathVariable Long myId){
-        return journalEntries.get(myId);
+    public JournalEntry getJournalEntrybyId(@PathVariable ObjectId myId){
+        return journalEntryService.getById(myId).orElse(null);
     }
+
     @DeleteMapping("id/{myId}")
-    public JournalEntry deleteJournalEntrybyId(@PathVariable Long myId){
-        return journalEntries.remove(myId);
+    public void deleteJournalEntrybyId(@PathVariable ObjectId myId){
+         journalEntryService.deleteById(myId);
     }
-    @PutMapping("id/{id}")
-    public JournalEntry updateJounalbyId(@PathVariable Long id , @RequestBody JournalEntry entry){
-        return journalEntries.put(id , entry);
+    @PutMapping("update/{myId}")
+    public JournalEntry updateJounal(@PathVariable ObjectId myId ,  @RequestBody JournalEntry entry){
+        return journalEntryService.updateEntry(myId , entry);
 
     }
 
